@@ -47,6 +47,22 @@ export function AuthProvider({ children }) {
     }
   }
 
+  const loginWithGoogle = async (credential) => {
+    try {
+      const res = await fetch('/api/auth-google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential }),
+      })
+      const data = await res.json()
+      if (!res.ok) return { ok: false, error: data.error || 'Error al iniciar sesion con Google.' }
+      setUser(data.user)
+      return { ok: true, user: data.user }
+    } catch {
+      return { ok: false, error: 'Error de conexion. Intenta de nuevo.' }
+    }
+  }
+
   const logout = () => setUser(null)
 
   const updateUser = async (data) => {
@@ -63,7 +79,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, register, login, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, register, login, loginWithGoogle, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   )

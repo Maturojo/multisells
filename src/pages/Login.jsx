@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Swal from 'sweetalert2'
+import GoogleLoginButton from '../components/GoogleLoginButton'
 
 export default function Login() {
-  const { login } = useAuth()
+  const { login, loginWithGoogle } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from || '/'
@@ -29,6 +30,29 @@ export default function Login() {
         color: '#1a1209',
         iconColor: '#9c664d',
         timer: 2500,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      })
+      navigate(from)
+    } else {
+      setError(result.error)
+      setLoading(false)
+    }
+  }
+
+  const handleGoogle = async (credential) => {
+    setLoading(true)
+    setError('')
+    const result = await loginWithGoogle(credential)
+    if (result.ok) {
+      await Swal.fire({
+        title: `Â¡Hola, ${result.user?.nombre?.split(' ')[0] || ''}!`,
+        text: 'Iniciaste sesiÃ³n con Google correctamente.',
+        icon: 'success',
+        confirmButtonColor: '#9c664d',
+        background: '#FDF9F0',
+        color: '#1a1209',
+        timer: 2200,
         timerProgressBar: true,
         showConfirmButton: false,
       })
@@ -70,6 +94,9 @@ export default function Login() {
             {loading ? 'Ingresando...' : 'Ingresar'}
           </button>
         </form>
+
+        <div className="auth-separator"><span>o</span></div>
+        <GoogleLoginButton onCredential={handleGoogle} disabled={loading} />
 
         <p className="auth-switch">
           ¿No tenés cuenta? <Link to="/registro" className="auth-link">Registrate gratis</Link>

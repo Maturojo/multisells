@@ -2665,3 +2665,48 @@ button { cursor: pointer; border: none; font-family: inherit; }
   .personalizador-preview { position: static; }
   .mate-canvas-wrap { height: 320px; }
 }
+
+.auth-separator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+}
+
+.auth-separator::before,
+.auth-separator::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--borde);
+}
+
+.google-login-wrap {
+  display: grid;
+  width: 100%;
+  min-height: 44px;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.google-login-wrap > div,
+.google-login-wrap iframe {
+  width: 100% !important;
+}
+
+.google-login-wrap.disabled {
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.auth-google-note {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem;
+  border: 1px dashed var(--borde);
+  border-radius: 10px;
+  color: var(--texto-suave);
+  font-size: 0.82rem;
+  text-align: center;
+}
